@@ -1,0 +1,50 @@
+package com.assignment.webservice;
+import java.util.List;
+import java.util.logging.Logger;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.core.MediaType;
+
+import com.assignment.security.Authentication;
+
+@Path("home")
+public class Resource {
+
+	private static final Logger LOGGER = Logger.getLogger(Resource.class.getName());
+	
+	@GET
+	@Path("login")
+	public String login(ContainerRequestContext requestContext) {
+		LOGGER.info("Entering:" + Resource.class.getName() + "--->" +
+                Thread.currentThread().getStackTrace()[1].getMethodName());
+		
+        List<String> usernameAndPassword;
+        Authentication authentication = new Authentication();
+        usernameAndPassword = authentication.extractHeaderInfo(requestContext);
+        System.out.println(usernameAndPassword.get(0));
+        System.out.println(usernameAndPassword.get(1));
+		LOGGER.info("Leaving:" + Resource.class.getName() + "--->" +
+                Thread.currentThread().getStackTrace()[1].getMethodName());
+		return "";
+	}
+	  @GET
+	  @Produces(MediaType.TEXT_PLAIN)
+	  public String sayPlainTextHello() {
+	    return "Hello Jersey";
+	  }
+	  @GET
+	  @Produces(MediaType.TEXT_XML)
+	  public String sayXMLHello() {
+	    return "<?xml version=\"1.0\"?>" + "<hello> Hello Jersey" + "</hello>";
+	  }
+	  @GET
+	  @Produces(MediaType.TEXT_HTML)
+	  public String sayHtmlHello() {
+	    return "<html> " + "<title>" + "Hello Jersey" + "</title>"
+	        + "<body><h1>" + "Hello Jersey" + "</body></h1>" + "</html> ";
+	  }
+
+}
